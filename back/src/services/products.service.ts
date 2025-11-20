@@ -1,3 +1,4 @@
+import { AppDataSource } from "../config/dataSource";
 import { Product } from "../entities/Product";
 import { ProductRepository } from "../repositories/product.repository";
 
@@ -8,6 +9,13 @@ export const checkProductExists = async (itemId: number): Promise<boolean> => {
   return !!item;
 };
 
-export const getProductsService = async (): Promise<Product[]> => {
-  return await ProductRepository.find();
-};
+export async function getProductsService() {
+  const repo = AppDataSource.getRepository(Product);
+  return await repo.find();
+}
+
+export async function getProductByIdService(id: number) {
+  const repo = AppDataSource.getRepository(Product);
+  const product = await repo.findOneBy({ id });
+  return product ?? null;
+}

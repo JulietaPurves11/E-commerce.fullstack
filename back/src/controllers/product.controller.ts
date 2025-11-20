@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { catchedController } from "../utils/catchedController";
-import { getProductsService } from "../services/products.service";
+import { getProductsService, getProductByIdService } from "../services/products.service";
 
 export const getProducts = catchedController(
   async (req: Request, res: Response) => {
@@ -8,3 +8,15 @@ export const getProducts = catchedController(
     res.json(products);
   }
 );
+
+export const getProductById = catchedController(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: "Missing id" });
+
+    const product = await getProductByIdService(Number(id));
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    res.json(product);
+  }
+)

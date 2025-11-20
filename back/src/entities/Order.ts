@@ -23,7 +23,7 @@ export class Order {
   @Column()
   date: Date;
 
-  @ManyToOne(() => User, (user) => user.orders)
+  @ManyToOne(() => User, (user: User) => user.orders)
   @JoinColumn({ name: "userId" })
   user: User;
 

@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&display=swap');
+
+:root {
+  --color-bg-dark: #190019;
+  --color-purple: #2B124C;
+  --color-violet: #522B5B;
+  --color-rose: #854F6C;
+  --color-pink: #DFB6B2;
+  --color-cream: #FBE4D8;
+
+  --background: var(--color-cream);
+  --foreground: var(--color-bg-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #190019;
+    --foreground: #FBE4D8;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Alan Sans', sans-serif !important;
+}
+
+@theme inline {
+  --color-bg-dark: #190019;
+  --color-purple: #2B124C;
+  --color-violet: #522B5B;
+  --color-rose: #854F6C;
+  --color-pink: #DFB6B2;
+  --color-cream: #FBE4D8;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-alan-sans);
+}

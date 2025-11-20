@@ -32,7 +32,7 @@ export class Product {
   @Column()
   categoryId: number;
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category, (category: Category) => category.products)
   @JoinColumn({ name: "categoryId" })
   category: Category;
 }

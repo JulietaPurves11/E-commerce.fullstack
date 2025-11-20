@@ -40,7 +40,7 @@ export class User {
     @JoinColumn()
     credential: Credential;
 
-    @OneToMany(() => Order, order => order.user)
+    @OneToMany(() => Order, (order: Order) => order.user)
     orders: Order[];
 }
 
