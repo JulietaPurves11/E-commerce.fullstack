@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { IProduct } from "@/interfaces/IProduct";
+import { useAuth } from "./AuthContext";
 
 export interface CartItem extends IProduct {
   quantity: number;
@@ -19,16 +20,26 @@ interface CartContextValue {
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useAuth();
+
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("cart");
-    if (saved) setCart(JSON.parse(saved));
-  }, []);
+  const storageKey = user ? `cart_${user.id}` : null;
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    if (storageKey) {
+    const saved = localStorage.getItem(storageKey);
+    setCart(saved ? JSON.parse(saved) : []);
+    } else {
+      setCart([]);
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (storageKey) {
+      localStorage.setItem(storageKey, JSON.stringify(cart));
+    }
+  }, [cart, storageKey]);
 
   const addToCart = (product: IProduct) => {
     setCart(prev => {

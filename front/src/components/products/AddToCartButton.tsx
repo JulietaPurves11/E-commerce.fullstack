@@ -1,16 +1,26 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { IProduct } from "@/interfaces/IProduct";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AddToCartButton({ product }: { product: IProduct }) {
   const { addToCart } = useCart();
-  const [successMessage, setSuccessMessage] = useState<string>("");
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleClick = async () => {
+    if (!isAuthenticated) {
+      router.push("/login");
+      return;
+    }
+
     try {
-      await addToCart(product);
+      addToCart(product);
       setSuccessMessage("Producto agregado correctamente");
 
       setTimeout(() => setSuccessMessage(""), 3000);
