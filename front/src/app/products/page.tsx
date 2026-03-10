@@ -1,4 +1,4 @@
-import Card from "@/components/Card"; 
+import Card from "@/components/ProductCard"; 
 import { IProduct } from "@/interfaces/IProduct";
 
 
