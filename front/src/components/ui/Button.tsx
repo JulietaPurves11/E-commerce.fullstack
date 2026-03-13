@@ -1,39 +1,61 @@
-import { ButtonHTMLAttributes } from "react";
+import Link from "next/link";
+import { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 import { cn } from "../lib/cn";
 
 type ButtonVariant = "primary" | "secondary" | "ghost";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type CommonProps = {
   variant?: ButtonVariant;
   fullWidth?: boolean;
-}
-
-const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    "bg-pink text-bg-dark hover:bg-pink/80",
-  secondary:
-    "bg-purple text-cream hover:bg-purple/80",
-  ghost:
-    "bg-transparent text-cream border border-rose/40 hover:bg-rose/20",
+  className?: string;
+  children: React.ReactNode;
 };
 
-export default function Button({
-  variant = "primary",
-  fullWidth = false,
-  className,
-  children,
-  ...props
-}: ButtonProps) {
+type ButtonAsButton = CommonProps &
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    as?: "button";
+    href?: never;
+  };
+
+type ButtonAsLink = CommonProps &
+  AnchorHTMLAttributes<HTMLAnchorElement> & {
+    as: "link";
+    href: string;
+  };
+
+type ButtonProps = ButtonAsButton | ButtonAsLink;
+
+const variantClasses: Record<ButtonVariant, string> = {
+  primary: "bg-pink text-bg-dark hover:bg-pink/80",
+  secondary: "bg-purple text-cream hover:bg-purple/80",
+  ghost: "bg-transparent text-cream border border-rose/40 hover:bg-rose/20",
+};
+
+const baseClasses =
+  "inline-flex items-center justify-center px-4 py-2 rounded-md font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed";
+
+export default function Button(props: ButtonProps) {
+  const { variant = "primary", fullWidth = false, className, children } = props;
+
+  const classes = cn(
+    baseClasses,
+    fullWidth && "w-full",
+    variantClasses[variant],
+    className
+  );
+
+  if (props.as === "link") {
+    const { href, ...rest } = props;
+    return (
+      <Link href={href} className={classes} {...rest}>
+        {children}
+      </Link>
+    );
+  }
+
+  const { ...rest } = props;
   return (
-    <button
-      className={cn(
-        "px-4 py-2 rounded-md font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed",
-        fullWidth && "w-full",
-        variantClasses[variant],
-        className
-      )}
-      {...props}
-    >
+    <button className={classes} {...rest}>
       {children}
     </button>
   );

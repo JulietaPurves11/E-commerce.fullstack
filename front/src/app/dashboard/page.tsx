@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getMyOrders } from "@/lib/api/orders";
 
 interface ProductInOrder {
   id: number;
@@ -32,17 +33,9 @@ export default function Dashboard() {
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:3001/users/orders", {
-          headers: {
-            Authorization: token!,
-          },
-          
-        });
-
-        if (!res.ok) throw new Error("Error al obtener órdenes");
-
-        const data: Order[] = await res.json();
+        const data = await getMyOrders(token!);
         setOrders(data);
+        
       } catch (err) {
         console.error(err);
       } finally {

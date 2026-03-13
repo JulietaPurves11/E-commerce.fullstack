@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { registerUser } from "@/lib/api/auth";
 
 type RegisterData = {
   name: string;
@@ -67,22 +68,13 @@ export default function RegisterForm() {
     setSuccessMsg("");
 
     try {
-      const res = await fetch("http://localhost:3001/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          password: form.password,
-          address: form.address,
-          phone: form.phone,
-        }),
+      await registerUser({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        address: form.address,
+        phone: form.phone,
       });
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => null);
-        throw new Error(errorData?.message || "Error al registrarse. Intenta nuevamente.");
-      }
 
       setSuccessMsg("Registro exitoso. Redirigiendo...");
       setTimeout(() => router.push("/login"), 1500);

@@ -5,6 +5,8 @@ import { useCart } from "@/context/CartContext";
 import { IProduct } from "@/interfaces/IProduct";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Button from "../ui/Button";
+import Badge from "../ui/Badge";
 
 export default function AddToCartButton({ product }: { product: IProduct }) {
   const { addToCart } = useCart();
@@ -33,14 +35,12 @@ export default function AddToCartButton({ product }: { product: IProduct }) {
 
   return (
     <div>
-      <button
-        onClick={handleClick}
-        className="w-full bg-purple hover:bg-purple/80 text-cream font-bold py-3 px-6 rounded"
-      >
+      <Button onClick={handleClick} variant="secondary" fullWidth>
         Agregar al carrito
-      </button>
+      </Button>
+
       {successMessage && (
-        <p className="text-green-600 mt-2 text-sm">{successMessage}</p>
+        <Badge variant="primary">{successMessage}</Badge>
       )}
     </div>
   );  

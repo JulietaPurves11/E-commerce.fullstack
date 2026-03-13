@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
+//import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Image from "next/image";
-
-
+import Button from "@/components/ui/Button";
+import { createOrder } from "@/lib/api/orders";
 
 export default function CartPage() {
   const { isAuthenticated, token, loading } = useAuth();
@@ -28,12 +28,9 @@ export default function CartPage() {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center bg-cream text-bg-dark">
         <h2 className="text-3xl font-bold mb-4">Tu carrito está vacío</h2>
-        <Link
-          href="/products"
-          className="bg-accent hover:bg-accent-dark text-bg-dark px-6 py-3 rounded-md font-medium"
-        >
+        <Button as="link" href="/products" variant="primary">
           Ver productos
-        </Link>
+        </Button>
       </main>
     );
   }
@@ -48,19 +45,10 @@ export default function CartPage() {
     }
     try {
     const ids = cart.map(p => p.id);
-
-    const res = await fetch("http://localhost:3001/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-      body: JSON.stringify({ products: ids }),
-    });
-
-    if (!res.ok) throw new Error("No se pudo procesar la compra");
-
+    await createOrder(ids, token);
+    
     clearCart();
+
     router.push("/dashboard?order=success");
   } catch {
     alert("Hubo un problema al procesar tu compra.");
@@ -93,29 +81,20 @@ export default function CartPage() {
               </div>
 
               <div className="flex items-center gap-2 mt-2">
-                <button
-                  onClick={() => decreaseQuantity(item.id)}
-                  className="px-2 py-1 bg-rose/30 rounded"
-                >
+                <Button onClick={() => decreaseQuantity(item.id)} variant="ghost" className="px-3 py-1">
                   -
-                </button>
+                </Button>
 
                 <span className="px-3">{item.quantity}</span>
 
-                <button
-                  onClick={() => increaseQuantity(item.id)}
-                  className="px-2 py-1 bg-rose/30 rounded"
-                >
+                <Button onClick={() => increaseQuantity(item.id)} variant="ghost" className="px-3 py-1">
                   +
-                </button>
+                </Button>
               </div>
 
-              <button
-                onClick={() => removeFromCart(item.id)}
-                className="text-sm text-red-400 hover:text-red-300"
-              >
+              <Button onClick={() => removeFromCart(item.id)} variant="ghost" className="text-red-300 border-red-300/40 hover:bg-red-500/10">
                 Eliminar
-              </button>
+              </Button>
             </div>
           ))}
         </div>
@@ -123,12 +102,9 @@ export default function CartPage() {
         <div className="mt-8 text-right">
           <p className="text-2xl font-bold">Total: ${total}</p>
 
-          <button
-            onClick={handleCheckout}
-            className="mt-6 w-full bg-pink text-bg-dark py-3 rounded-lg font-bold hover:bg-pink/80"
-          >
+          <Button onClick={handleCheckout} variant="primary" fullWidth className="mt-6 py-3 font-bold">
             Finalizar compra
-          </button>
+          </Button>
         </div>
       </div>
     </main>

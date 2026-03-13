@@ -1,22 +1,9 @@
 import Card from "@/components/ProductCard"; 
 import { IProduct } from "@/interfaces/IProduct";
-
-
-async function getProducts(): Promise<IProduct[]> {
-  const res = await fetch("http://localhost:3001/products", {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error("Error al obtener los productos");
-  }
-  const data: IProduct[] = await res.json();
-  return data;
-}
-
+import { getProducts } from "@/lib/api/products";
 
 export default async function ProductsPage() {
-  const products: IProduct[] = await getProducts();
+  const products = await getProducts();
 
   return (
     <main className="min-h-screen bg-cream text-bg-dark px-8 py-12">

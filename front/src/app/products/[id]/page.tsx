@@ -1,7 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
-import { IProduct } from "@/interfaces/IProduct";
-import Link from "next/link";
+//import { IProduct } from "@/interfaces/IProduct";
+import Image from "next/image";
+import { getProductById } from "@/lib/api/products";
+//import Link from "next/link";
 import AddToCartButton from "@/components/products/AddToCartButton";
+import Button from "@/components/ui/Button";
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
@@ -13,23 +15,12 @@ function getErrorMessage(error: unknown): string {
   }
 }
 
-async function getProductById(id: string): Promise<IProduct> {
-  const url = `http://localhost:3001/products/${id}`;
-  const res = await fetch(url, { cache: "no-store" });
-
-  if (!res.ok) {
-    const body = await res.text().catch(() => "<no body>");
-    throw new Error(`(${res.status}) ${res.statusText} - ${body}`);
-  }
-
-  return (await res.json()) as IProduct;
-}
-
 export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   try {
     const product = await getProductById(id);
+    const imageSrc = product.image?.startsWith("http") ? product.image : "/fallback.jpg";
 
     return (
       <main className="min-h-screen bg-cream text-bg-dark flex flex-col items-center py-12">
@@ -39,10 +30,12 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
           <div className="flex flex-col md:flex-row gap-8">
 
             <div className="w-full md:w-1/2 h-72 md:h-auto overflow-hidden rounded-lg shadow">
-              <img
-                src={product.image && product.image.startsWith("http") ? product.image : "/fallback.jpg"}
+              <Image
+                src={imageSrc}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
 
@@ -75,12 +68,12 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
           </p>
 
           <div className="flex gap-3">
-            <Link href="/products" className="btn-primary">
+            <Button as="link" href="/products" variant="primary">
               Volver a Productos
-            </Link>
-            <Link href={`/products/${id}`} className="px-4 py-2 rounded-md border text-sm">
+            </Button>
+            <Button as="link" href={`/products/${id}`} variant="ghost">
               Reintentar
-            </Link>
+            </Button>
           </div>
         </div>
       </main>

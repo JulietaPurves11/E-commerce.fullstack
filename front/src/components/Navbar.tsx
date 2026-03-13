@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Button from "./ui/Button";
 
 export default function Navbar() {
   const [visible, setVisible] = useState(true);
@@ -35,46 +36,38 @@ export default function Navbar() {
         </Link>
 
         <div className="flex gap-4">
-          <NavButton href="/" label="Inicio" />
-          <NavButton href="/products" label="Productos" />
+          <Button as="link" href="/" variant="ghost" className="text-sm">
+            Inicio
+          </Button>
+          <Button as="link" href="/products" variant="ghost" className="text-sm">
+            Productos
+          </Button>
 
           {isAuthenticated ? (
             <>
-              <NavButton href="/cart" label="Carrito" />
-              <NavButton href="/dashboard" label="Mi cuenta" />
+              <Button as="link" href="/cart" variant="ghost" className="text-sm">
+                Carrito
+              </Button>
+              <Button as="link" href="/dashboard" variant="ghost" className="text-sm">
+                Mi cuenta
+              </Button>
 
-              <button
-                onClick={logout}
-                className="bg-rose/30 hover:bg-pink text-cream px-3 py-1 rounded-md text-sm font-medium transition-all shadow-sm hover:shadow-md"
-              >
+              <Button onClick={logout} variant="primary" className="text-sm">
                 Cerrar sesión
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <NavButton href="/login" label="Iniciar sesión" />
-              <NavButton href="/register" label="Registrarse" />
+              <Button as="link" href="/login" variant="ghost" className="text-sm">
+                Iniciar sesión
+              </Button>
+              <Button as="link" href="/register" variant="primary" className="text-sm">
+                Registrarse
+              </Button>
             </>
           )}
         </div>
       </nav>
     </header>
-  );
-}
-
-function NavButton({
-  href,
-  label,
-}: {
-  href: string;
-  label: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="bg-rose/30 hover:bg-pink text-cream px-3 py-1 rounded-md text-sm font-medium transition-all shadow-sm hover:shadow-md"
-    >
-      {label}
-    </Link>
   );
 }

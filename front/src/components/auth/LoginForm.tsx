@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import { loginUser } from "@/lib/api/auth";
 
 type LoginData = {
   email: string;
@@ -47,20 +48,10 @@ export default function LoginForm() {
     setGeneralError("");
 
     try {
-      const res = await fetch("http://localhost:3001/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
+      const data = await loginUser({
+        email: form.email,
+        password: form.password,
       });
-
-      const data = await res.json();
-
-      if (!res.ok  || !data.login) {
-        throw new Error("credenciales inválidas");
-      }
 
       auth.login(data.token, data.user);
 
