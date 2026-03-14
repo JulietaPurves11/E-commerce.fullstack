@@ -18,7 +18,7 @@ type ButtonAsButton = CommonProps &
   };
 
 type ButtonAsLink = CommonProps &
-  AnchorHTMLAttributes<HTMLAnchorElement> & {
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
     as: "link";
     href: string;
   };
@@ -45,17 +45,17 @@ export default function Button(props: ButtonProps) {
   );
 
   if (props.as === "link") {
-    const { href, ...rest } = props;
+    const { href, as: _as, fullWidth: _fullWidth, variant: _variant, ...linkProps } = props; // eslint-disable-line @typescript-eslint/no-unused-vars
     return (
-      <Link href={href} className={classes} {...rest}>
+      <Link href={href} className={classes} {...linkProps}>
         {children}
       </Link>
     );
   }
 
-  const { ...rest } = props;
+  const { as: _as, fullWidth: _fullWidth, variant: _variant, ...buttonProps } = props; // eslint-disable-line @typescript-eslint/no-unused-vars
   return (
-    <button className={classes} {...rest}>
+    <button className={classes} {...buttonProps}>
       {children}
     </button>
   );
