@@ -3,7 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { IProduct } from "@/interfaces/IProduct";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "../ui/Button";
 import Badge from "../ui/Badge";
@@ -12,12 +12,14 @@ export default function AddToCartButton({ product }: { product: IProduct }) {
   const { addToCart } = useCart();
   const { isAuthenticated } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleClick = async () => {
     if (!isAuthenticated) {
-      router.push("/login");
+      const redirectTo = encodeURIComponent(pathname);
+      router.push(`/login?redirectTo=${redirectTo}`);
       return;
     }
 

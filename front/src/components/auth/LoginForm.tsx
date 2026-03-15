@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { loginUser } from "@/lib/api/auth";
@@ -19,6 +19,7 @@ export default function LoginForm() {
 
   const router = useRouter();
   const auth = useAuth();
+  const searchParams = useSearchParams();
 
   function validate(): boolean {
     const e: Partial<Record<keyof LoginData, string>> = {};
@@ -55,7 +56,8 @@ export default function LoginForm() {
 
       auth.login(data.token, data.user);
 
-      router.push("/dashboard");
+      const redirectTo = searchParams.get("redirectTo");
+      router.push(redirectTo || "/dashboard");
 
     } catch {
       setGeneralError("Email o contraseña incorrectos.");

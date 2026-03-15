@@ -90,8 +90,8 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white/5 rounded-lg shadow-sm">
       <h2 className="text-2xl font-semibold mb-4">Registro</h2>
 
-      {generalError && <p className="text-red-300 text-sm mb-3">{generalError}</p>}
-      {successMsg && <p className="text-green-300 text-sm mb-3">{successMsg}</p>}
+      {generalError && <p className="text-pink text-sm mb-3">{generalError}</p>}
+      {successMsg && <p className="text-pink text-sm mb-3">{successMsg}</p>}
 
       <label className="block mb-3">
         <span className="text-sm">Nombre</span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getMyOrders } from "@/lib/api/orders";
 
@@ -21,13 +21,15 @@ interface Order {
 export default function Dashboard() {
   const { user, token, isAuthenticated } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.replace("/login");
+      const redirectTo = encodeURIComponent(pathname);
+      router.replace(`/login?redirectTo=${redirectTo}`);
       return;
     }
 
@@ -35,7 +37,7 @@ export default function Dashboard() {
       try {
         const data = await getMyOrders(token!);
         setOrders(data);
-        
+
       } catch (err) {
         console.error(err);
       } finally {
@@ -44,7 +46,7 @@ export default function Dashboard() {
     };
 
     fetchOrders();
-  }, [isAuthenticated, router, token]);
+  }, [isAuthenticated, pathname, router, token]);
 
   if (!isAuthenticated) {
     return <p className="text-center mt-10">Redirigiendo...</p>;

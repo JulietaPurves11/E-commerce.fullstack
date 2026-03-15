@@ -23,34 +23,35 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
     const imageSrc = product.image?.startsWith("http") ? product.image : "/fallback.jpg";
 
     return (
-      <main className="min-h-screen bg-cream text-bg-dark flex flex-col items-center py-12">
-
-        <div className="w-full max-w-4xl bg-bg-dark text-cream p-6 md:p-10 rounded-lg shadow-lg">
-
-          <div className="flex flex-col md:flex-row gap-8">
-
-            <div className="w-full md:w-1/2 h-72 md:h-auto overflow-hidden rounded-lg shadow">
-              <Image
-                src={imageSrc}
-                alt={product.name}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
-
-            <div className="flex flex-col md:w-1/2">
-
-              <h1 className="text-3xl font-bold mb-3">{product.name}</h1>
-
-              <p className="text-2xl font-semibold mb-5">${product.price}</p>
-
-              <AddToCartButton product={product} />
-
-              <p className="text-base mt-6 leading-relaxed">
+      <main className="min-h-screen bg-cream text-bg-dark px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mx-auto w-full max-w-6xl bg-bg-dark text-cream rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-start">
+            
+            <div className="order-1 lg:order-2 flex flex-col">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-3">{product.name}</h1>
+    
+              <p className="text-xl sm:text-2xl font-semibold mb-4">${product.price}</p>
+    
+              <div className="mb-6">
+                <AddToCartButton product={product} />
+              </div>
+    
+              <p className="text-sm sm:text-base leading-relaxed text-cream/90">
                 {product.description}
               </p>
-
+            </div>
+    
+            
+            <div className="order-2 lg:order-1">
+              <div className="relative w-full aspect-[4/3] max-h-[420px] overflow-hidden rounded-lg shadow">
+                <Image
+                  src={imageSrc}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
             </div>
           </div>
         </div>

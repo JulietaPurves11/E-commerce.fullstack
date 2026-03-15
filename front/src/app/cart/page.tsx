@@ -3,7 +3,7 @@
 //import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
@@ -12,13 +12,17 @@ import { createOrder } from "@/lib/api/orders";
 export default function CartPage() {
   const { isAuthenticated, token, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const { cart, clearCart, increaseQuantity, decreaseQuantity, removeFromCart } = useCart();
   
  
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) router.replace("/login");
-  }, [loading, isAuthenticated, router]);
+    if (!loading && !isAuthenticated) {
+      const redirectTo = encodeURIComponent(pathname);
+      router.replace(`/login?redirectTo=${redirectTo}`);
+    }
+  }, [loading, isAuthenticated, pathname, router]);
 
   if (loading) return <p className="mt-10">Cargando...</p>;
 
@@ -40,13 +44,14 @@ export default function CartPage() {
   const handleCheckout = async () => {
     if (!token) {
       alert("Debes iniciar sesión para finalizar la compra.");
-      router.push("/login");
+      const redirectTo = encodeURIComponent(pathname);
+      router.push(`/login?redirectTo=${redirectTo}`);
       return;
     }
     try {
     const ids = cart.map(p => p.id);
     await createOrder(ids, token);
-    
+
     clearCart();
 
     router.push("/dashboard?order=success");
