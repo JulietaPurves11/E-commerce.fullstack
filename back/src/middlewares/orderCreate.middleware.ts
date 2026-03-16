@@ -26,6 +26,7 @@ const validateOrderFields = (
   if (!["envio", "retiro"].includes(checkout.deliveryMethod)){
     return next(new ClientError("Invalid delivery method"));
   }
+  next();
 };
 
 const validateItemsExist = async (
