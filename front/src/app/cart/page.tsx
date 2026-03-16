@@ -7,13 +7,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
-import { createOrder } from "@/lib/api/orders";
 
 export default function CartPage() {
-  const { isAuthenticated, token, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const { cart, clearCart, increaseQuantity, decreaseQuantity, removeFromCart } = useCart();
+  const { cart, increaseQuantity, decreaseQuantity, removeFromCart } = useCart();
   
  
 
@@ -41,24 +40,8 @@ export default function CartPage() {
 
   const total = cart.reduce((acc, p) => acc + p.price * p.quantity, 0);
 
-  const handleCheckout = async () => {
-    if (!token) {
-      alert("Debes iniciar sesión para finalizar la compra.");
-      const redirectTo = encodeURIComponent(pathname);
-      router.push(`/login?redirectTo=${redirectTo}`);
-      return;
-    }
-    try {
-    const ids = cart.map(p => p.id);
-    await createOrder(ids, token);
-
-    clearCart();
-
-    router.push("/dashboard?order=success");
-  } catch {
-    alert("Hubo un problema al procesar tu compra.");
-  }
-  console.log(token)
+  const handleCheckout = () => {
+    router.push("/checkout");
 };
 
 
@@ -108,7 +91,7 @@ export default function CartPage() {
           <p className="text-2xl font-bold">Total: ${total}</p>
 
           <Button onClick={handleCheckout} variant="primary" fullWidth className="mt-6 py-3 font-bold">
-            Finalizar compra
+            Comprar
           </Button>
         </div>
       </div>

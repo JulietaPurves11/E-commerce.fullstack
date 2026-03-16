@@ -1,16 +1,10 @@
 export type DeliveryMethod = "envio" | "retiro";
 
-export interface CheckoutDto {
+export interface CheckoutData {
   name: string;
   email: string;
   address: string;
   city: string;
   postalCode: string;
   deliveryMethod: DeliveryMethod;
-}
-
-export interface CreateOrderDto {
-  userId: number;
-  products: number[];
-  checkout: CheckoutDto;
 }

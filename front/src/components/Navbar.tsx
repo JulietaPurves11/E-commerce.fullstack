@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Button from "./ui/Button";
@@ -9,6 +10,18 @@ export default function Navbar() {
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { isAuthenticated, logout } = useAuth();
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const term = searchTerm.trim();
+    if (!term) {
+      router.push("/products");
+      return;
+    }
+    router.push(`/products?q=${encodeURIComponent(term)}`);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,6 +47,22 @@ export default function Navbar() {
         <Link href="/" className="text-2xl font-bold tracking-wide">
           TechStore
         </Link>
+
+        <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center gap-2 mx-4 flex-1 max-w-md">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Buscar productos..."
+            className="w-full rounded-md px-3 py-2 text-sm bg-cream text-bg-dark placeholder:text-bg-dark/60"
+          />
+          <button
+            type="submit"
+            className="rounded-md bg-pink text-bg-dark px-3 py-2 text-sm font-medium hover:bg-cream transition-colors"
+          >
+            Buscar
+          </button>
+        </form>
 
         <div className="flex gap-4">
           <Button as="link" href="/" variant="ghost" className="text-sm">

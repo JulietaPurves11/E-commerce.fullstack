@@ -4,4 +4,5 @@ export interface ICardProps {
   description: string;
   price: number;
   image: string;
+  categoryId?: number;
 }

@@ -8,13 +8,24 @@ const validateOrderFields = (
   res: Response,
   next: NextFunction
 ) => {
-  const { products } = req.body;
+  const { products, checkout } = req.body;
 
   if (!Array.isArray(products))
     return next(new ClientError("Products must be an array"));
   if (products.length === 0)
     return next(new ClientError("Order must have at least one item"));
-  next();
+  if (!checkout || typeof checkout !== "object")
+    return next(new ClientError("Checkout data is required"));
+  const required = ["name", "email", "address", "city", "postalCode", "deliveryMethod"];
+  for (const field of required) {
+    if (!checkout[field] || String(checkout[field]).trim() === "") {
+      return next(new ClientError(`Missing checkout field: ${field}`));
+    }
+  }
+
+  if (!["envio", "retiro"].includes(checkout.deliveryMethod)){
+    return next(new ClientError("Invalid delivery method"));
+  }
 };
 
 const validateItemsExist = async (

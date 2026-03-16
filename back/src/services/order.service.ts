@@ -24,6 +24,12 @@ export const createOrderService = async (
   newOrder.date = new Date();
   newOrder.user = userF;
   newOrder.products = productsF;
+  newOrder.customerName = createOrderDto.checkout.name;
+  newOrder.customerEmail = createOrderDto.checkout.email;
+  newOrder.customerAddress = createOrderDto.checkout.address;
+  newOrder.customerCity = createOrderDto.checkout.city;
+  newOrder.customerPostalCode = createOrderDto.checkout.postalCode;
+  newOrder.deliveryMethod = createOrderDto.checkout.deliveryMethod;
 
   await OrderRepository.save(newOrder);
   return newOrder;

@@ -30,4 +30,22 @@ export class Order {
   @ManyToMany(() => Product)
   @JoinTable()
   products: Product[];
+
+  @Column()
+customerName: string;
+
+@Column()
+customerEmail: string;
+
+@Column()
+customerAddress: string;
+
+@Column()
+customerCity: string;
+
+@Column()
+customerPostalCode: string;
+
+@Column()
+deliveryMethod: string;
 }

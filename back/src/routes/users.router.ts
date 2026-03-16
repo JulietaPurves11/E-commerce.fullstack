@@ -16,6 +16,7 @@ usersRouter.get("/orders", checkLogin, async (req: Request, res: Response) => {
   const orders = await OrderRepository.find({
     relations: ["products"],
     where: { user: { id: userId } },
+    order: { date: "DESC" },
   });
 
   res.send(orders);
