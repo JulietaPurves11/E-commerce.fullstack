@@ -124,7 +124,7 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full bg-color-pink text-color-bg-dark py-2 rounded-md font-medium disabled:opacity-60"
+        className="w-full bg-pink text-bg-dark py-2 rounded-md font-medium disabled:opacity-60"
       >
         {submitting ? "Enviando..." : "Entrar"}
       </button>

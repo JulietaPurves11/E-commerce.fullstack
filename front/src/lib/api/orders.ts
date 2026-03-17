@@ -16,7 +16,7 @@ export interface ProductInOrder {
 export interface Order {
   id: number;
   products: ProductInOrder[];
-  productsQuantities?: Record<string, number>;
+  productQuantities?: Record<string, number>;
   status: string;
   date: string;
   customerName?: string;

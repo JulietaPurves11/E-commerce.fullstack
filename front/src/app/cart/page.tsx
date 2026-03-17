@@ -90,7 +90,7 @@ export default function CartPage() {
         <div className="mt-8 text-right">
           <p className="text-2xl font-bold">Total: ${total}</p>
 
-          <Button onClick={handleCheckout} variant="primary" fullWidth className="mt-6 py-3 font-bold">
+          <Button onClick={handleCheckout} variant="primary" fullWidth className="mt-6 py-3 text-base font-semibold">
             Comprar
           </Button>
         </div>

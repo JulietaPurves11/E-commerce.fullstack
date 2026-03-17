@@ -63,7 +63,7 @@ export default function Dashboard() {
           <div className="flex flex-col gap-5">
             {orders.map(order => {
               const total = order.products.reduce((acc, p) => {
-                const qty = order.productsQuantities?.[String(p.id)] ?? 1;
+                const qty = order.productQuantities?.[String(p.id)] ?? 1;
                 return acc + p.price * qty;
               }, 0);
 
@@ -100,7 +100,7 @@ export default function Dashboard() {
                 <ul className="list-disc ml-5 mb-4">
                   {order.products.map(p => (
                     <li key={p.id}>
-                      {p.name} — ${p.price} x {order.productsQuantities?.[String(p.id)] ?? 1}
+                      {p.name} — ${p.price} x {order.productQuantities?.[String(p.id)] ?? 1}
                     </li>
                   ))}
                 </ul>
