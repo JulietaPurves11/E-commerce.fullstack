@@ -20,9 +20,11 @@ export default function Navbar() {
     const term = searchTerm.trim();
     if (!term) {
       router.push("/products");
+      setSearchTerm("");
       return;
     }
     router.push(`/products?q=${encodeURIComponent(term)}`);
+    setSearchTerm("");
   };
 
   useEffect(() => {

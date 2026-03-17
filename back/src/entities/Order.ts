@@ -31,6 +31,9 @@ export class Order {
   @JoinTable()
   products: Product[];
 
+  @Column("simple-json", { nullable: true })
+  productQuantities: Record<string, number>;
+
   @Column({ nullable: true })
   customerName: string;
   

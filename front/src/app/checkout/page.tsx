@@ -72,9 +72,9 @@ export default function CheckoutPage() {
 
     try {
       setSubmitting(true);
-      const ids = cart.map((p) => p.id);
+      const items = cart.map((p) => ({ id: p.id, quantity: p.quantity }));
 
-      await createOrder(ids, form, token);
+      await createOrder(items, form, token);
       clearCart();
 
       router.push("/dashboard?order=success");

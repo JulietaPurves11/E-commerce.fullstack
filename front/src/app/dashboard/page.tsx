@@ -3,20 +3,8 @@
 import { useAuth } from "@/context/AuthContext";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getMyOrders } from "@/lib/api/orders";
+import { getMyOrders, Order } from "@/lib/api/orders";
 
-interface ProductInOrder {
-  id: number;
-  name: string;
-  price: number;
-}
-
-interface Order {
-  id: number;
-  products: ProductInOrder[];
-  status: string;
-  date: string;
-}
 
 export default function Dashboard() {
   const { user, token, isAuthenticated } = useAuth();
@@ -74,10 +62,10 @@ export default function Dashboard() {
         ) : (
           <div className="flex flex-col gap-5">
             {orders.map(order => {
-              const total = order.products.reduce(
-                (acc, p) => acc + p.price,
-                0
-              );
+              const total = order.products.reduce((acc, p) => {
+                const qty = order.productsQuantities?.[String(p.id)] ?? 1;
+                return acc + p.price * qty;
+              }, 0);
 
               return (
               <div
@@ -112,7 +100,7 @@ export default function Dashboard() {
                 <ul className="list-disc ml-5 mb-4">
                   {order.products.map(p => (
                     <li key={p.id}>
-                      {p.name} — ${p.price}
+                      {p.name} — ${p.price} x {order.productsQuantities?.[String(p.id)] ?? 1}
                     </li>
                   ))}
                 </ul>

@@ -9,8 +9,13 @@ export interface CheckoutDto {
   deliveryMethod: DeliveryMethod;
 }
 
+export interface OrderProductDto {
+  id: number;
+  quantity: number;
+}
+
 export interface CreateOrderDto {
   userId: number;
-  products: number[];
+  products: OrderProductDto[];
   checkout: CheckoutDto;
 }

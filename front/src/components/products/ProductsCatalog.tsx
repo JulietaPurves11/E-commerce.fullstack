@@ -45,7 +45,7 @@ export default function ProductsCatalog({ products }: { products: IProduct[] }) 
   const searchParams = useSearchParams();
   const qFromUrl = (searchParams.get("q") || "").trim();
 
-  const [search] = useState(qFromUrl);
+  const search = qFromUrl;
   const [category, setCategory] = useState<CategoryFilter>("todas");
 
   const filteredProducts = useMemo(() => {

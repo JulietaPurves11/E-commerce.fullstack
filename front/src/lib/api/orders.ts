@@ -2,6 +2,11 @@ import { CheckoutData } from "@/interfaces/ICheckout";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
+export interface OrderProductInput {
+  id: number;
+  quantity: number;
+}
+
 export interface ProductInOrder {
   id: number;
   name: string;
@@ -11,6 +16,7 @@ export interface ProductInOrder {
 export interface Order {
   id: number;
   products: ProductInOrder[];
+  productsQuantities?: Record<string, number>;
   status: string;
   date: string;
   customerName?: string;
@@ -21,14 +27,14 @@ export interface Order {
   deliveryMethod?: "envio" | "retiro";
 }
 
-export async function createOrder(productIds: number[], checkout: CheckoutData, token: string): Promise<void> {
+export async function createOrder(products: OrderProductInput[], checkout: CheckoutData, token: string): Promise<void> {
   const res = await fetch(`${API_URL}/orders`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: token,
     },
-    body: JSON.stringify({ products: productIds, checkout }),
+    body: JSON.stringify({ products, checkout }),
   });
 
   if (!res.ok) {

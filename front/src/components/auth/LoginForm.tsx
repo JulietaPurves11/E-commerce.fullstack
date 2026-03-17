@@ -22,17 +22,20 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
 
   function validate(): boolean {
-    const e: Partial<Record<keyof LoginData, string>> = {};
+  const e: Partial<Record<keyof LoginData, string>> = {};
+  const email = form.email.trim();
 
-    if (!form.email.trim()) e.email = "El email es requerido.";
-    else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "Formato de email inválido.";
+  if (!email) e.email = "Completá tu email.";
+  else if (!/^\S+@\S+\.\S+$/.test(email))
+    e.email = "Ingresá un email válido. Ej: nombre@correo.com";
 
-    if (!form.password) e.password = "La contraseña es requerida.";
-    else if (form.password.length < 6) e.password = "Debe tener mínimo 6 caracteres.";
+  if (!form.password.trim()) e.password = "Completá tu contraseña.";
+  else if (form.password.length < 6)
+    e.password = "La contraseña debe tener al menos 6 caracteres.";
 
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  }
+  setErrors(e);
+  return Object.keys(e).length === 0;
+}
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -79,9 +82,18 @@ export default function LoginForm() {
           type="email"
           value={form.email}
           onChange={handleChange}
+          required
+          placeholder="nombre@correo.com"
+          autoComplete="email"
+          aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? "login-email-error" : "login-email-help"}
           className="mt-1 block w-full px-3 py-2 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink"
         />
-        {errors.email && <p className="text-xs text-red-300 mt-1">{errors.email}</p>}
+        {errors.email && (
+          <p id="login-email-error" className="text-xs text-red-300 mt-1">
+            {errors.email}
+          </p>
+        )}
       </label>
 
       <label className="block mb-4">
@@ -91,9 +103,22 @@ export default function LoginForm() {
           type="password"
           value={form.password}
           onChange={handleChange}
+          required
+          minLength={6}
+          placeholder="Mínimo 6 caracteres"
+          autoComplete="current-password"
+          aria-invalid={!!errors.password}
+          aria-describedby={errors.password ? "login-password-error" : "login-password-help"}
           className="mt-1 block w-full px-3 py-2 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink"
         />
-        {errors.password && <p className="text-xs text-red-300 mt-1">{errors.password}</p>}
+        <p id="login-password-help" className="text-xs opacity-70 mt-1">
+          Debe tener al menos 6 caracteres.
+        </p>
+        {errors.password && (
+          <p id="login-password-error" className="text-xs text-red-300 mt-1">
+            {errors.password}
+          </p>
+        )}
       </label>
 
       <button

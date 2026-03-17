@@ -32,22 +32,33 @@ export default function RegisterForm() {
 
   function validate(): boolean {
     const e: Partial<Record<keyof RegisterData, string>> = {};
-
-    if (!form.name.trim()) e.name = "El nombre es requerido.";
-    if (!form.email.trim()) e.email = "El email es requerido.";
-    else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "Formato inválido.";
-
-    if (!form.password) e.password = "La contraseña es requerida.";
-    else if (form.password.length < 6) e.password = "Debe tener al menos 6 caracteres.";
-
-    if (form.password !== form.passwordConfirm)
+  
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const address = form.address.trim();
+    const phone = form.phone.trim();
+  
+    if (!name) e.name = "Completá tu nombre.";
+  
+    if (!email) e.email = "Completá tu email.";
+    else if (!/^\S+@\S+\.\S+$/.test(email))
+      e.email = "Ingresá un email válido. Ej: nombre@correo.com";
+  
+    if (!form.password.trim()) e.password = "Completá tu contraseña.";
+    else if (form.password.length < 6)
+      e.password = "La contraseña debe tener al menos 6 caracteres.";
+  
+    if (!form.passwordConfirm.trim())
+      e.passwordConfirm = "Confirmá tu contraseña.";
+    else if (form.password !== form.passwordConfirm)
       e.passwordConfirm = "Las contraseñas no coinciden.";
-
-    if (!form.address.trim()) e.address = "La dirección es requerida.";
-
-    if (!form.phone.trim()) e.phone = "El teléfono es requerido.";
-    else if (!/^\d{6,15}$/.test(form.phone)) e.phone = "Debe tener entre 6 y 15 dígitos.";
-
+  
+    if (!address) e.address = "Completá tu dirección.";
+  
+    if (!phone) e.phone = "Completá tu teléfono.";
+    else if (!/^\d{6,15}$/.test(phone))
+      e.phone = "El teléfono debe tener entre 6 y 15 dígitos.";
+  
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -100,6 +111,7 @@ export default function RegisterForm() {
           type="text"
           value={form.name}
           onChange={handleChange}
+          required
           className="mt-1 block w-full px-3 py-2 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink"
           aria-invalid={!!errors.name}
           aria-describedby={errors.name ? "name-error" : undefined}
@@ -114,6 +126,8 @@ export default function RegisterForm() {
           type="email"
           value={form.email}
           onChange={handleChange}
+          required
+          placeholder="nombre@correo.com"
           className="mt-1 block w-full px-3 py-2 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink"
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "email-error" : undefined}
@@ -128,6 +142,7 @@ export default function RegisterForm() {
           type="text"
           value={form.address}
           onChange={handleChange}
+          required
           className="mt-1 block w-full px-3 py-2 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink"
           aria-invalid={!!errors.address}
           aria-describedby={errors.address ? "address-error" : undefined}
@@ -142,6 +157,10 @@ export default function RegisterForm() {
           type="tel"
           value={form.phone}
           onChange={handleChange}
+          required
+          pattern="^[0-9]{6,15}$"
+          inputMode="numeric"
+          placeholder="Solo numeros, de 6 a 15 dígitos"
           className="mt-1 block w-full px-3 py-2 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink"
           aria-invalid={!!errors.phone}
           aria-describedby={errors.phone ? "phone-error" : undefined}
@@ -156,6 +175,9 @@ export default function RegisterForm() {
           type="password"
           value={form.password}
           onChange={handleChange}
+          required
+          minLength={6}
+          placeholder="Minimo 6 caracteres"
           className="mt-1 block w-full px-3 py-2 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink"
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}
@@ -170,6 +192,9 @@ export default function RegisterForm() {
           type="password"
           value={form.passwordConfirm}
           onChange={handleChange}
+          required
+          minLength={6}
+          placeholder="Repeti la contraseña"
           className="mt-1 block w-full px-3 py-2 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-pink"
           aria-invalid={!!errors.passwordConfirm}
           aria-describedby={errors.passwordConfirm ? "passwordConfirm-error" : undefined}

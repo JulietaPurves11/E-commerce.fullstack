@@ -8,8 +8,16 @@ export const createOrderService = async (
   createOrderDto: CreateOrderDto
 ): Promise<Order> => {
   const productsF = [];
+  const productQuantities: Record<string, number> = {};
 
-  for await (const id of createOrderDto.products) {
+  for (const item of createOrderDto.products) {
+    productQuantities[String(item.id)] =
+      (productQuantities[String(item.id)] || 0) + item.quantity;
+  }
+
+  const uniqueProductIds = Object.keys(productQuantities).map(Number);
+
+  for await (const id of uniqueProductIds) {
     const product = await ProductRepository.findOneBy({ id });
     if (!product) throw new Error("Product not found");
     productsF.push(product);
@@ -24,6 +32,7 @@ export const createOrderService = async (
   newOrder.date = new Date();
   newOrder.user = userF;
   newOrder.products = productsF;
+  newOrder.productQuantities = productQuantities;
   newOrder.customerName = createOrderDto.checkout.name;
   newOrder.customerEmail = createOrderDto.checkout.email;
   newOrder.customerAddress = createOrderDto.checkout.address;
